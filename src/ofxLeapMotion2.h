@@ -25,6 +25,7 @@ public:
     ofPoint handNormal;
     ofPoint direction;
     ofPoint wristPos;
+    ofPoint velocity;
     float pitch, yaw, roll, grabStrength;
     bool isLeft;
     
@@ -293,7 +294,8 @@ public:
             curHand.handNormal  = getofPoint( leapHands[i].palmNormal() );
             curHand.direction   = getofPoint( leapHands[i].direction() );
             curHand.wristPos    = getMappedofPoint( leapHands[i].wristPosition() );
-            
+            curHand.velocity = getofPoint(leapHands[i].palmVelocity());
+
             curHand.yaw         = leapHands[i].direction().yaw();
             curHand.roll        = leapHands[i].palmNormal().roll();
             curHand.pitch       = leapHands[i].direction().pitch();
