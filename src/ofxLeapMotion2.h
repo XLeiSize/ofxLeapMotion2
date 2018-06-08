@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include "ofMain.h"
 #include "Leap.h"
@@ -26,6 +26,7 @@ public:
     ofPoint direction;
     ofPoint wristPos;
     ofPoint velocity;
+    ofPoint tip;
     float pitch, yaw, roll, grabStrength;
     bool isLeft;
     
@@ -261,8 +262,6 @@ public:
     //note: this function is called in a seperate thread - so GL commands here will cause the app to crash.
     //--------------------------------------------------------------
     virtual void onFrame(const Controller& contr){
-        ofLogVerbose("ofxLeapMotionApp - onFrame");
-        
         onFrameInternal(contr); // call this if you want to use getHands() / isFrameNew() etc
     }
     
@@ -313,8 +312,12 @@ public:
                 f.mcp = getMappedofPoint(finger.jointPosition(finger.JOINT_MCP));
                 f.pip = getMappedofPoint(finger.jointPosition(finger.JOINT_PIP));
                 f.tip = getMappedofPoint(finger.jointPosition(finger.JOINT_TIP));
-
+                
                 curHand.fingers[ fingerTypes[j] ] = f;
+                
+                if (curHand.handPos.z - f.pos.z > curHand.handPos.z - curHand.fingers[ fingerTypes[j-1] ].pos.z ) {
+                    curHand.tip = f.pos;
+                }
             }
             simpleHands.push_back( curHand );
         }
